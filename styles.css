@@ -1,23 +1,93 @@
 @import url('https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;700;900&display=swap');
 
+:root {
+    --bakery-bg: #fcf7ef;
+    --bakery-surface: #fffdf9;
+    --bakery-dark: #3E2723;
+    --bakery-accent: #C47A4D;
+    --bakery-muted: #7b6558;
+    --bakery-border: #f1e2d2;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
 body {
     font-family: 'Heebo', sans-serif;
+    background:
+        radial-gradient(circle at top right, rgba(196, 122, 77, 0.16), transparent 28%),
+        radial-gradient(circle at bottom left, rgba(62, 39, 35, 0.08), transparent 24%),
+        linear-gradient(135deg, #fefcf7 0%, var(--bakery-bg) 100%);
+    color: var(--bakery-dark);
+    min-height: 100vh;
 }
 
-/* Animations */
-.fade-in {
-    animation: fadeIn 0.6s ease-out forwards;
+body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    background-image: linear-gradient(rgba(255, 255, 255, 0.18) 1px, transparent 1px), linear-gradient(90deg, rgba(255, 255, 255, 0.18) 1px, transparent 1px);
+    background-size: 44px 44px;
+    mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.18), transparent 88%);
+    z-index: -1;
 }
 
-@keyframes fadeIn {
-    from {
-        opacity: 0;
-        transform: translateY(12px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
+nav {
+    border-bottom: 1px solid rgba(62, 39, 35, 0.06);
+    box-shadow: 0 10px 30px -18px rgba(62, 39, 35, 0.26);
+}
+
+main {
+    position: relative;
+}
+
+section {
+    position: relative;
+}
+
+.hero-visual {
+    background: linear-gradient(145deg, #ffffff 0%, #f8efe8 100%);
+    border: 1px solid rgba(196, 122, 77, 0.2);
+}
+
+.hero-visual img {
+    transition: transform 0.65s ease;
+}
+
+.hero-visual:hover img {
+    transform: scale(1.04);
+}
+
+.hero-visual::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.04), transparent 40%);
+    pointer-events: none;
+}
+
+.product-card {
+    position: relative;
+    background: rgba(255, 253, 249, 0.95);
+    border: 1px solid rgba(196, 122, 77, 0.16);
+    box-shadow: 0 16px 40px -20px rgba(62, 39, 35, 0.28);
+    overflow: hidden;
+    backdrop-filter: blur(10px);
+}
+
+.product-card::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(145deg, rgba(196, 122, 77, 0.07) 0%, transparent 48%);
+    pointer-events: none;
+}
+
+.product-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 22px 46px -18px rgba(62, 39, 35, 0.32);
 }
 
 .img-hover-zoom {
@@ -28,33 +98,45 @@ body {
     transform: scale(1.05);
 }
 
+.product-card button,
+#checkout-btn,
+#send-whatsapp-btn {
+    box-shadow: 0 10px 20px -10px rgba(196, 122, 77, 0.44);
+}
+
+.product-card button:hover,
+#checkout-btn:hover,
+#send-whatsapp-btn:hover {
+    transform: translateY(-1px);
+}
+
 /* Light styling for the pack size dropdown */
-.select-wrapper{
+.select-wrapper {
     position: relative;
     display: inline-block;
 }
 
-.count-select{
+.count-select {
     -webkit-appearance: none;
     -moz-appearance: none;
     appearance: none;
-    padding: 0.55rem 1.1rem 0.55rem 0.9rem; /* space for custom arrow */
-    border-radius: 0.6rem;
-    border: 1px solid rgba(0,0,0,0.08);
-    background: #fff;
-    box-shadow: 0 1px 2px rgba(16,24,40,0.03);
+    padding: 0.55rem 1.1rem 0.55rem 0.9rem;
+    border-radius: 0.8rem;
+    border: 1px solid rgba(62, 39, 35, 0.12);
+    background: #fffdf9;
+    box-shadow: 0 8px 18px -10px rgba(62, 39, 35, 0.18);
     font-size: 0.95rem;
-    color: #374151;
+    color: var(--bakery-dark);
     cursor: pointer;
 }
 
 /* Custom arrow using a simple SVG background */
-.select-wrapper::after{
+.select-wrapper::after {
     content: '';
     position: absolute;
     top: 50%;
     transform: translateY(-50%);
-    right: 10px; /* rtl layout: arrow on left visually, but keep on right for design */
+    right: 10px;
     width: 18px;
     height: 18px;
     background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20' fill='%233E2723'><path d='M5.23 7.21a.75.75 0 0 1 1.06.02L10 10.94l3.71-3.71a.75.75 0 0 1 1.08 1.04l-4.25 4.25a.75.75 0 0 1-1.06 0L5.21 8.27a.75.75 0 0 1 .02-1.06z'/></svg>");
@@ -64,12 +146,22 @@ body {
 }
 
 /* Small focus state */
-.count-select:focus{
-    outline: 2px solid rgba(196,122,77,0.18);
+.count-select:focus {
+    outline: 2px solid rgba(196, 122, 77, 0.2);
     outline-offset: 2px;
+    border-color: rgba(196, 122, 77, 0.35);
+}
+
+#cart-modal,
+#checkout-card {
+    box-shadow: 0 24px 70px -24px rgba(62, 39, 35, 0.45);
+}
+
+footer {
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
 }
 
 /* Tighten dropdown spacing on small screens */
-@media (max-width: 640px){
-    .count-select{ padding: 0.45rem 0.9rem 0.45rem 0.7rem; }
+@media (max-width: 640px) {
+    .count-select { padding: 0.45rem 0.9rem 0.45rem 0.7rem; }
 }
