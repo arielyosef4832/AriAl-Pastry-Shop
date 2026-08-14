@@ -92,10 +92,11 @@ section {
 
 .img-hover-zoom {
     transition: transform 0.5s ease;
+    transform: rotate(-90deg);
 }
 
 .product-card:hover .img-hover-zoom {
-    transform: scale(1.05);
+    transform: rotate(-90deg) scale(1.05);
 }
 
 .product-card button,
@@ -111,41 +112,24 @@ section {
 }
 
 /* Light styling for the pack size dropdown */
-.select-wrapper {
-    position: relative;
-    display: inline-block;
-}
-
 .count-select {
     -webkit-appearance: none;
     -moz-appearance: none;
     appearance: none;
-    padding: 0.55rem 1.1rem 0.55rem 0.9rem;
+    padding: 0.35rem 0.7rem 0.35rem 2rem;
     border-radius: 0.8rem;
     border: 1px solid rgba(62, 39, 35, 0.12);
-    background: #fffdf9;
+    background: #fffdf9 url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23C47A4D'><path d='M7 10l5 5 5-5z'/></svg>") no-repeat;
+    background-position: 0.5rem center;
+    background-size: 1.2rem;
     box-shadow: 0 8px 18px -10px rgba(62, 39, 35, 0.18);
     font-size: 0.95rem;
     color: var(--bakery-dark);
     cursor: pointer;
+    width: 117px;
+    max-width: 100%;
 }
 
-/* Custom arrow using a simple SVG background */
-.select-wrapper::after {
-    content: '';
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-    right: 10px;
-    width: 18px;
-    height: 18px;
-    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20' fill='%233E2723'><path d='M5.23 7.21a.75.75 0 0 1 1.06.02L10 10.94l3.71-3.71a.75.75 0 0 1 1.08 1.04l-4.25 4.25a.75.75 0 0 1-1.06 0L5.21 8.27a.75.75 0 0 1 .02-1.06z'/></svg>");
-    background-repeat: no-repeat;
-    background-position: center;
-    pointer-events: none;
-}
-
-/* Small focus state */
 .count-select:focus {
     outline: 2px solid rgba(196, 122, 77, 0.2);
     outline-offset: 2px;
@@ -159,9 +143,4 @@ section {
 
 footer {
     border-top: 1px solid rgba(255, 255, 255, 0.08);
-}
-
-/* Tighten dropdown spacing on small screens */
-@media (max-width: 640px) {
-    .count-select { padding: 0.45rem 0.9rem 0.45rem 0.7rem; }
 }

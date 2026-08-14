@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AriAl Bakery | מאפיית ארטיזן פרימיום</title>
+    <title>AriAl Bakery | מאפיית פרימיום</title>
 
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
@@ -26,15 +26,23 @@
 <body class="bg-bakery-bg text-bakery-dark antialiased overflow-x-hidden font-heebo">
 
     <nav class="fixed w-full top-0 bg-bakery-bg/95 backdrop-blur-sm shadow-sm z-40 transition-all duration-300">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 grid grid-cols-[auto_auto] justify-between items-center">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 grid grid-cols-[auto_auto] justify-between items-center gap-3">
             <div class="grid grid-cols-[auto_auto] items-center gap-3 cursor-pointer">
-                <i class="fa-solid fa-wheat-awn text-bakery-accent text-2xl"></i>
+                <img src="https://images.unsplash.com/photo-1499636136210-6f4ee915583e?q=80&w=200&auto=format&fit=crop" alt="chocolate chip cookie" class="h-8 w-8 object-contain rounded-full">
                 <span class="font-bold text-2xl tracking-wide text-bakery-dark">AriAl</span>
             </div>
-            <button id="cart-btn" class="relative text-bakery-dark hover:text-bakery-accent transition-colors duration-300">
-                <i class="fa-solid fa-bag-shopping text-2xl"></i>
-                <span id="cart-count" class="absolute -top-2 -left-2 bg-bakery-accent text-white text-xs font-bold h-5 w-5 rounded-full grid place-items-center opacity-0 transition-opacity">0</span>
-            </button>
+
+            <div class="flex items-center gap-3">
+                <button id="auth-btn" class="flex items-center gap-2 rounded-full border border-gray-200 bg-white/80 px-3 py-2 shadow-sm text-sm font-medium text-bakery-dark hover:border-bakery-accent transition-colors">
+                    <i class="fa-solid fa-user text-xs"></i>
+                    <span id="auth-btn-label">התחברות</span>
+                </button>
+
+                <button id="cart-btn" class="relative text-bakery-dark hover:text-bakery-accent transition-colors duration-300">
+                    <i class="fa-solid fa-bag-shopping text-2xl"></i>
+                    <span id="cart-count" class="absolute -top-2 -left-2 bg-bakery-accent text-white text-xs font-bold h-5 w-5 rounded-full grid place-items-center opacity-0 transition-opacity">0</span>
+                </button>
+            </div>
         </div>
     </nav>
 
@@ -52,13 +60,9 @@
                     לתפריט המלא
                 </a>
             </div>
-            <div class="hero-visual w-full h-96 rounded-[2rem] overflow-hidden shadow-[0_25px_70px_-20px_rgba(62,39,35,0.45)] relative">
-                <img src="https://images.unsplash.com/photo-1509440159596-0249088772ff?q=80&w=1000&auto=format&fit=crop" alt="מאפים טריים" class="w-full h-full object-cover">
+            <div class="hero-visual w-96 h-96 rounded-full overflow-hidden shadow-[0_25px_70px_-20px_rgba(62,39,35,0.45)] relative grid place-items-center">
+                <img src="https://i.ibb.co/xq77wcH3/logo.png" alt="AriAl Bakery" class="w-full h-full object-cover">
                 <div class="absolute inset-0 bg-linear-to-t from-[#3E2723]/70 via-[#3E2723]/10 to-transparent"></div>
-                <div class="absolute bottom-4 right-4 bg-white/90 backdrop-blur-sm rounded-2xl px-4 py-3 shadow-lg border border-white/70">
-                    <p class="text-xs font-semibold uppercase tracking-[0.2em] text-bakery-accent">מוכן כל בוקר</p>
-                    <p class="text-sm font-bold text-bakery-dark">מאפים חמים, טריים ומושקעים</p>
-                </div>
             </div>
         </section>
 
@@ -78,14 +82,77 @@
             </div>
             <div>
                 <h4 class="font-bold mb-4 text-lg">איסוף עצמי</h4>
-                <p class="text-sm text-gray-400 leading-relaxed">איסוף עצמי בלבד<br>ימים ג'-א', 07:00 - 16:00</p>
+                <p class="text-sm text-gray-400 leading-relaxed">איסוף עצמי בלבד<br>ימים א'-ה', 16:00 - 20:00<br>יום ו', 10:00 - 18:00</p>
             </div>
             <div>
                 <h4 class="font-bold mb-4 text-lg">צור קשר</h4>
-                <p class="text-sm text-gray-400 leading-relaxed">hello@arialbakery.co.il<br>050-000-0000</p>
+                <p class="text-sm text-gray-400 leading-relaxed">hello@arialbakery.co.il<br>0546566428<br>0542304814</p>
             </div>
         </div>
     </footer>
+
+    <div id="auth-modal" class="fixed inset-0 z-[60] hidden">
+        <div id="auth-overlay" class="absolute inset-0 bg-black/50 backdrop-blur-sm"></div>
+        <div class="relative z-10 mx-auto mt-20 max-w-md rounded-2xl bg-white p-6 shadow-2xl">
+            <div class="mb-5 flex items-center justify-between">
+                <h3 class="text-2xl font-bold text-bakery-dark">חשבון</h3>
+                <button id="close-auth-btn" class="text-gray-500 hover:text-bakery-dark">
+                    <i class="fa-solid fa-xmark text-xl"></i>
+                </button>
+            </div>
+
+            <div class="mb-5 grid grid-cols-2 gap-2 rounded-xl bg-gray-100 p-1">
+                <button type="button" data-auth-mode="login" class="auth-mode-btn rounded-lg bg-white px-3 py-2 text-sm font-bold text-bakery-dark shadow-sm">התחברות</button>
+                <button type="button" data-auth-mode="register" class="auth-mode-btn rounded-lg px-3 py-2 text-sm font-bold text-gray-500">יצירת משתמש</button>
+            </div>
+
+            <div id="auth-login-panel" class="auth-panel space-y-4 text-right">
+                <div>
+                    <label for="auth-login-identifier" class="mb-1 block text-sm font-bold text-gray-700">אימייל או מספר טלפון</label>
+                    <input id="auth-login-identifier" type="text" placeholder="name@example.com / 050-123-4567" class="w-full rounded-lg border border-gray-300 px-3 py-2.5 text-sm focus:border-bakery-accent focus:outline-none">
+                </div>
+
+                <div>
+                    <label for="auth-login-password" class="mb-1 block text-sm font-bold text-gray-700">סיסמה</label>
+                    <input id="auth-login-password" type="password" placeholder="הכנס/י סיסמה" class="w-full rounded-lg border border-gray-300 px-3 py-2.5 text-sm focus:border-bakery-accent focus:outline-none">
+                </div>
+
+                <button id="auth-login-btn" class="w-full rounded-lg bg-bakery-accent px-4 py-3 font-bold text-white transition-colors hover:bg-bakery-dark">
+                    כניסה
+                </button>
+            </div>
+
+            <div id="auth-register-panel" class="auth-panel hidden space-y-4 text-right">
+                <div>
+                    <label for="auth-register-name" class="mb-1 block text-sm font-bold text-gray-700">שם</label>
+                    <input id="auth-register-name" type="text" placeholder="הכנס/י שם" class="w-full rounded-lg border border-gray-300 px-3 py-2.5 text-sm focus:border-bakery-accent focus:outline-none">
+                </div>
+
+                <div>
+                    <label for="auth-register-identifier" class="mb-1 block text-sm font-bold text-gray-700">אימייל או מספר טלפון</label>
+                    <input id="auth-register-identifier" type="text" placeholder="name@example.com / 050-123-4567" class="w-full rounded-lg border border-gray-300 px-3 py-2.5 text-sm focus:border-bakery-accent focus:outline-none">
+                </div>
+
+                <div>
+                    <label for="auth-register-password" class="mb-1 block text-sm font-bold text-gray-700">סיסמה</label>
+                    <input id="auth-register-password" type="password" placeholder="בחר/י סיסמה" class="w-full rounded-lg border border-gray-300 px-3 py-2.5 text-sm focus:border-bakery-accent focus:outline-none">
+                </div>
+
+                <button id="auth-send-code-btn" class="w-full rounded-lg bg-bakery-dark px-4 py-3 font-bold text-white transition-colors hover:bg-bakery-accent">
+                    שלח קוד אימות
+                </button>
+
+                <div>
+                    <label for="auth-register-code" class="mb-1 block text-sm font-bold text-gray-700">קוד אימות</label>
+                    <input id="auth-register-code" type="text" inputmode="numeric" maxlength="4" placeholder="הכנס/י 4 ספרות" class="w-full rounded-lg border border-gray-300 px-3 py-2.5 text-sm focus:border-bakery-accent focus:outline-none">
+                </div>
+
+                <button id="auth-register-btn" class="w-full rounded-lg bg-bakery-accent px-4 py-3 font-bold text-white transition-colors hover:bg-bakery-dark">
+                    צור משתמש
+                </button>
+            </div>
+        </div>
+    </div>
 
     <div id="cart-overlay" class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 hidden opacity-0 transition-opacity duration-300"></div>
     <div id="cart-modal" class="fixed top-0 left-0 h-full w-full sm:w-96 bg-white shadow-2xl z-50 transform -translate-x-full transition-transform duration-300 grid grid-rows-[auto_1fr_auto]">
