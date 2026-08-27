@@ -28,6 +28,15 @@ const products = [
         ],
         image: "https://i.ibb.co/MydLs0SH/butter-cookies.jpg"
     },
+    {
+        id: 3,
+        name: "עוגיות ירח שקדים",
+        desc: "עוגיות ירח שקדים, אווריריות, רכות וטעימות, בעלות טעם שקדים עדין.",
+        options: [
+            { label: '20 יחידות', value: 20, price: 20.00 },
+        ],
+        image: "https://i.ibb.co/MydLs0SH/butter-cookies.jpg"
+    },
 ];
 
 // --- DOM Elements ---

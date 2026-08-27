@@ -1,12 +1,13 @@
 @import url('https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;700;900&display=swap');
 
 :root {
-    --bakery-bg: #fcf7ef;
-    --bakery-surface: #fffdf9;
-    --bakery-dark: #3E2723;
-    --bakery-accent: #C47A4D;
-    --bakery-muted: #7b6558;
-    --bakery-border: #f1e2d2;
+    --bakery-bg: #fffaf5; /* soft cream background */
+    --bakery-surface: #ffffff;
+    --bakery-dark: #3E2723; /* dark chocolate for text */
+    --bakery-accent: #D86C7A; /* raspberry glaze */
+    --bakery-accent-2: #EFD089; /* buttercream/yellow */
+    --bakery-muted: #80614F;
+    --bakery-border: #efe2d6;
 }
 
 html {
@@ -16,8 +17,8 @@ html {
 body {
     font-family: 'Heebo', sans-serif;
     background:
-        radial-gradient(circle at top right, rgba(196, 122, 77, 0.16), transparent 28%),
-        radial-gradient(circle at bottom left, rgba(62, 39, 35, 0.08), transparent 24%),
+        radial-gradient(circle at top right, rgba(239, 208, 137, 0.08), transparent 28%), /* subtle buttercream */
+        radial-gradient(circle at bottom left, rgba(216, 108, 122, 0.04), transparent 24%), /* faint raspberry */
         linear-gradient(135deg, #fefcf7 0%, var(--bakery-bg) 100%);
     color: var(--bakery-dark);
     min-height: 100vh;
@@ -49,7 +50,7 @@ section {
 
 .hero-visual {
     background: linear-gradient(145deg, #ffffff 0%, #f8efe8 100%);
-    border: 1px solid rgba(196, 122, 77, 0.2);
+    border: 1px solid rgba(62, 39, 35, 0.06);
 }
 
 .hero-visual img {
@@ -71,7 +72,7 @@ section {
 .product-card {
     position: relative;
     background: rgba(255, 253, 249, 0.95);
-    border: 1px solid rgba(196, 122, 77, 0.16);
+    border: 1px solid rgba(62, 39, 35, 0.08);
     box-shadow: 0 16px 40px -20px rgba(62, 39, 35, 0.28);
     overflow: hidden;
     backdrop-filter: blur(10px);
@@ -81,7 +82,7 @@ section {
     content: '';
     position: absolute;
     inset: 0;
-    background: linear-gradient(145deg, rgba(196, 122, 77, 0.07) 0%, transparent 48%);
+    background: linear-gradient(145deg, rgba(239, 208, 137, 0.05) 0%, transparent 48%); /* soft buttercream sheen */
     pointer-events: none;
 }
 
@@ -101,7 +102,8 @@ section {
 .product-card button,
 #checkout-btn,
 #send-whatsapp-btn {
-    box-shadow: 0 10px 20px -10px rgba(196, 122, 77, 0.44);
+    /* subtle dark shadow plus a soft buttercream tint for a bakery feel */
+    box-shadow: 0 10px 20px -10px rgba(62, 39, 35, 0.12), 0 6px 12px -8px rgba(239, 208, 137, 0.14);
 }
 
 .product-card button:hover,
@@ -114,13 +116,15 @@ section {
 .select-wrapper {
     position: relative;
     display: inline-block;
+    vertical-align: middle;
 }
 
 .count-select {
     -webkit-appearance: none;
     -moz-appearance: none;
     appearance: none;
-    padding: 0.55rem 1.1rem 0.55rem 0.9rem;
+    /* increased right padding so the arrow doesn't overlap the text */
+    padding: 0.55rem 2.4rem 0.55rem 0.9rem;
     border-radius: 0.8rem;
     border: 1px solid rgba(62, 39, 35, 0.12);
     background: #fffdf9;
@@ -136,9 +140,10 @@ section {
     position: absolute;
     top: 50%;
     transform: translateY(-50%);
-    right: 10px;
-    width: 18px;
-    height: 18px;
+    /* nudged slightly to match increased padding */
+    right: 12px;
+    width: 14px;
+    height: 14px;
     background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20' fill='%233E2723'><path d='M5.23 7.21a.75.75 0 0 1 1.06.02L10 10.94l3.71-3.71a.75.75 0 0 1 1.08 1.04l-4.25 4.25a.75.75 0 0 1-1.06 0L5.21 8.27a.75.75 0 0 1 .02-1.06z'/></svg>");
     background-repeat: no-repeat;
     background-position: center;
@@ -147,9 +152,9 @@ section {
 
 /* Small focus state */
 .count-select:focus {
-    outline: 2px solid rgba(196, 122, 77, 0.2);
+    outline: 2px solid rgba(239, 208, 137, 0.28); /* buttercream highlight */
     outline-offset: 2px;
-    border-color: rgba(196, 122, 77, 0.35);
+    border-color: rgba(216, 108, 122, 0.12); /* faint raspberry border */
 }
 
 #cart-modal,
