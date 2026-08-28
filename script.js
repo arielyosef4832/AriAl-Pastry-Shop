@@ -12,7 +12,23 @@ const products = [
             { label: '20 יחידות', value: 20, price: 15 },
             { label: '50 יחידות', value: 50, price: 25 },
         ],
-        image: "https://i.ibb.co/MydLs0SH/butter-cookies.jpg", alt: "עוגיות חמאה"
+        image: "https://i.ibb.co/MydLs0SH/butter-cookies.jpg", alt: "עוגיות חמאה",
+        personalization: {
+            title: "התאמה אישית לעוגיות חמאה",
+            description: "בחר כמה מכל צורה תרצה, ויותר מצורה אחת אם תרצה.",
+            groups: [
+                {
+                    key: "shapes",
+                    label: "צורות",
+                    options: [
+                        { value: "heart", label: "לב", defaultQty: 10 },
+                        { value: "star", label: "כוכב", defaultQty: 10 },
+                        { value: "flower", label: "פרח", defaultQty: 10 },
+                        { value: "circle", label: "עיגול", defaultQty: 10 }
+                    ]
+                }
+            ]
+        }
     },
     {
         id: 2,
@@ -33,7 +49,7 @@ const products = [
             { label: "20 יחידות", value: 20, price: 20 },
             { label: "50 יחידות", value: 50, price: 45 }
         ],
-        image: "", alt: "עוגיות ירח שקדים"
+        image: "https://i.ibb.co/PnHDQkc/moon-cookies.jpg", alt: "עוגיות ירח שקדים"
     },
     {
         id: 4,
@@ -43,7 +59,7 @@ const products = [
             { label: "12 יחידות", value: 12, price: 60 },
             { label: "20 יחידות", value: 20, price: 70 }
         ],
-        image: "", alt: "עוגיות מגולגלות קינדר"
+        image: "https://i.ibb.co/993HLW1G/kinder-rolls.jpg", alt: "עוגיות מגולגלות קינדר"
     },
     {
         id: 5,
@@ -52,7 +68,7 @@ const products = [
         options: [
             { label: "עוגה אחת", value: 1, price: 110 },
         ],
-        image: "", alt: "עוגת גבינת לוטוס"
+            image: "https://i.ibb.co/LX1pGWrf/lotus-cake.jpg", alt: "עוגת גבינת לוטוס"
     },
     {
         id: 6,
@@ -68,9 +84,38 @@ const products = [
         name: "קראמבל קוקיז",
         desc: "קראמבל קוקיז פריך וטעים במיוחד, עם שוקולד איכותי שממלא את כל העוגיה.",
         options: [
-            { label: "", value: null, price: null }
+            { label: "4 יחידות", value: 4, price: 15 },
+            { label: "6 יחידות", value: 6, price: 25 },
+            { label: "8 יחידות", value: 8, price: 35 }
         ],
-        image: "https://i.ibb.co/8DjrG6r1/crumble-cookies.jpg", alt: "קראמבל קוקיז"
+        image: "https://i.ibb.co/8DjrG6r1/crumble-cookies.jpg", alt: "קראמבל קוקיז",
+        personalization: {
+            title: "התאמה אישית לקראמבל קוקיז",
+            description: "בחר כמה טעמים תרצה, ואיזה כמות מכל טעם.",
+            groups: [
+                {
+                    key: "tastes",
+                    label: "טעמים",
+                    options: [
+                        { value: "lotus", label: "לוטוס", defaultQty: 8 },
+                        { value: "chocolate", label: "שוקולד", defaultQty: 8 },
+                        { value: "strawberry", label: "תות", defaultQty: 8 },
+                        { value: "vanilla", label: "וניל", defaultQty: 8 }
+                    ]
+                }
+            ]
+        }
+    },
+    {
+        id: 8,
+        name: "עוגיות אמסטרדם",
+        desc: "עוגיות אמסטרדם פריכות וטעימות במיוחד, עם שוקולד איכותי שממלא את כל העוגיה.",
+        options: [
+            { label: "4 יחידות", value: 4, price: 20 },
+            { label: "6 יחידות", value: 6, price: 25 },
+            { label: "8 יחידות", value: 8, price: 30 }
+        ],
+        image: "https://i.ibb.co/5gLWNhWR/amsterdam-cookies.jpg", alt: "עוגיות אמסטרדם"
     }
     
 ];
@@ -337,6 +382,284 @@ document.addEventListener('DOMContentLoaded', () => {
     setupWhatsAppOrderHandler();
 });
 
+let activePersonalizationProduct = null;
+
+function ensurePersonalizationModal() {
+    if (document.getElementById('personalization-modal')) return;
+
+    const modalMarkup = `
+        <div id="personalization-modal" class="fixed inset-0 z-50 hidden">
+            <div id="personalization-overlay" class="absolute inset-0 bg-black/60 backdrop-blur-sm"></div>
+            <div class="relative mx-auto mt-8 max-w-3xl rounded-[30px] bg-white shadow-2xl border border-gray-200">
+                <div class="flex items-center justify-between border-b border-gray-200 px-6 py-4">
+                    <button id="personalization-close" class="text-gray-500 hover:text-gray-700 text-2xl" aria-label="סגור">×</button>
+                    <h3 id="personalization-title" class="text-xl font-bold text-bakery-dark">התאמה אישית</h3>
+                </div>
+                <div class="max-h-[72vh] overflow-y-auto p-6">
+                    <div class="mb-6 rounded-2xl bg-bakery-soft p-4">
+                        <div class="flex items-center gap-4">
+                            <img id="personalization-image" class="hidden h-20 w-20 rounded-2xl object-cover shadow-sm" src="" alt="">
+                            <div class="text-right">
+                                <h4 id="personalization-product-name" class="text-lg font-bold text-bakery-dark"></h4>
+                                <p id="personalization-description" class="text-sm text-gray-600"></p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mb-6">
+                        <label class="mb-2 block text-right text-sm font-bold text-bakery-dark">בחר סוג/כמות בסיס</label>
+                        <select id="personalization-size-select" class="w-full rounded-xl border border-gray-200 bg-white px-4 py-3 text-right text-gray-700 focus:border-bakery-accent focus:outline-none"></select>
+                    </div>
+
+                    <div id="personalization-groups" class="space-y-6"></div>
+
+                    <div class="mt-6 rounded-2xl border border-dashed border-bakery-accent bg-amber-50/20 p-4">
+                        <div class="mb-2 text-right text-sm font-bold text-bakery-dark">סיכום:</div>
+                        <div id="personalization-summary" class="text-right text-sm text-gray-600">בחר לפחות אפשרות אחת</div>
+                    </div>
+                </div>
+
+                <div class="flex items-center justify-between gap-3 border-t border-gray-200 px-6 py-4">
+                    <button id="personalization-cancel" class="rounded-xl border border-gray-200 px-4 py-2 text-sm font-semibold text-gray-600 hover:bg-gray-100">
+                        ביטול
+                    </button>
+                    <button id="personalization-add" class="rounded-xl bg-bakery-accent px-5 py-2.5 text-sm font-bold text-white hover:bg-bakery-dark">
+                        הוסף לסל
+                    </button>
+                </div>
+            </div>
+        </div>
+    `;
+
+    document.body.insertAdjacentHTML('beforeend', modalMarkup);
+
+    document.getElementById('personalization-overlay').addEventListener('click', closePersonalizationModal);
+    document.getElementById('personalization-close').addEventListener('click', closePersonalizationModal);
+    document.getElementById('personalization-cancel').addEventListener('click', closePersonalizationModal);
+    document.getElementById('personalization-add').addEventListener('click', addPersonalizedItemToCart);
+    document.getElementById('personalization-size-select').addEventListener('change', updatePersonalizationSummary);
+}
+
+function closePersonalizationModal() {
+    const modal = document.getElementById('personalization-modal');
+    if (modal) modal.classList.add('hidden');
+    activePersonalizationProduct = null;
+}
+
+function getProductOptionsForSelect(product) {
+    if (Array.isArray(product.options) && product.options.length) return product.options;
+    return [{ label: 'יחידה', value: 1, price: Number(product.price || 0) }];
+}
+
+function getPersonalizationLimit() {
+    const sizeSelect = document.getElementById('personalization-size-select');
+    const selected = sizeSelect?.selectedOptions?.[0];
+    const limit = Number(selected?.value || 0);
+    return Number.isFinite(limit) && limit > 0 ? limit : 0;
+}
+
+function enforcePersonalizationLimit() {
+    const groupsContainer = document.getElementById('personalization-groups');
+    if (!groupsContainer) return;
+
+    const limit = getPersonalizationLimit();
+    if (!limit) return;
+
+    const selectedBoxes = [...groupsContainer.querySelectorAll('.personalization-option:checked')];
+    let remaining = limit;
+
+    selectedBoxes.forEach((checkbox) => {
+        const qtyInput = groupsContainer.querySelector(
+            `.personalization-qty[data-group="${checkbox.dataset.group}"][data-value="${checkbox.value}"]`
+        );
+        const currentQty = Number(qtyInput?.value || 0);
+        if (currentQty <= 0) {
+            qtyInput.value = 0;
+            return;
+        }
+
+        const safeQty = Math.min(currentQty, remaining);
+        if (safeQty !== currentQty) {
+            qtyInput.value = safeQty;
+        }
+
+        remaining -= safeQty;
+    });
+}
+
+function updatePersonalizationSummary() {
+    const product = activePersonalizationProduct;
+    if (!product) return;
+
+    const groupsContainer = document.getElementById('personalization-groups');
+    if (!groupsContainer) return;
+
+    enforcePersonalizationLimit();
+
+    const summary = [];
+    let totalSelected = 0;
+
+    groupsContainer.querySelectorAll('.personalization-option').forEach((checkbox) => {
+        if (!checkbox.checked) return;
+
+        const qtyInput = groupsContainer.querySelector(
+            `.personalization-qty[data-group="${checkbox.dataset.group}"][data-value="${checkbox.value}"]`
+        );
+        const qty = Number(qtyInput?.value || 0);
+
+        if (qty > 0) {
+            summary.push(`${checkbox.dataset.label}: ${qty}`);
+            totalSelected += qty;
+        }
+    });
+
+    const summaryEl = document.getElementById('personalization-summary');
+    if (!summaryEl) return;
+
+    if (summary.length === 0) {
+        summaryEl.textContent = 'בחר לפחות אפשרות אחת';
+        summaryEl.classList.add('text-gray-600');
+        return;
+    }
+
+    const limit = getPersonalizationLimit();
+    if (limit > 0 && totalSelected > limit) {
+        summaryEl.textContent = `כמות כוללת: ${totalSelected}/${limit} - הסכום חייב להיות עד ${limit}`;
+    } else {
+        summaryEl.textContent = `${summary.join(' • ')} • סה"כ ${totalSelected}`;
+    }
+
+    summaryEl.classList.remove('text-gray-600');
+}
+
+function openPersonalizationModal(productId) {
+    const product = products.find((p) => p.id === productId);
+    if (!product) return;
+
+    ensurePersonalizationModal();
+    activePersonalizationProduct = product;
+
+    const titleEl = document.getElementById('personalization-title');
+    const productNameEl = document.getElementById('personalization-product-name');
+    const descriptionEl = document.getElementById('personalization-description');
+    const imageEl = document.getElementById('personalization-image');
+    const sizeSelectEl = document.getElementById('personalization-size-select');
+    const groupsEl = document.getElementById('personalization-groups');
+
+    titleEl.textContent = product.personalization?.title || 'התאמה אישית';
+    productNameEl.textContent = product.name;
+    descriptionEl.textContent = product.personalization?.description || product.desc || 'בחר את ההעדפה שלך';
+
+    imageEl.src = product.image || '';
+    imageEl.classList.toggle('hidden', !product.image);
+
+    const options = getProductOptionsForSelect(product);
+    sizeSelectEl.innerHTML = options.map(
+        (option) => `<option value="${option.value}" data-price="${option.price || 0}">${option.label}</option>`
+    ).join('');
+
+    const groups = product.personalization?.groups || [
+        {
+            key: 'custom',
+            label: 'בחירה',
+            options: [{ value: 'custom', label: 'מותאם אישית', defaultQty: 1 }]
+        }
+    ];
+
+    groupsEl.innerHTML = groups.map((group) => `
+        <div class="rounded-2xl border border-gray-200 bg-white p-4">
+            <div class="mb-3 text-right text-sm font-bold text-bakery-dark">${group.label}</div>
+            <div class="space-y-3">
+                ${group.options.map((option) => `
+                    <label class="flex items-center justify-between gap-3 rounded-xl border border-gray-200 bg-gray-50 px-3 py-2">
+                        <input
+                            class="personalization-option"
+                            type="checkbox"
+                            data-group="${group.key}"
+                            data-label="${option.label}"
+                            value="${option.value}"
+                            onchange="updatePersonalizationSummary()"
+                        >
+                        <span class="text-sm text-gray-700">${option.label}</span>
+                        <input
+                            class="personalization-qty w-20 rounded-lg border border-gray-200 bg-white px-2 py-1 text-center text-sm text-gray-700"
+                            type="number"
+                            min="1"
+                            value="${option.defaultQty || 1}"
+                            data-group="${group.key}"
+                            data-value="${option.value}"
+                            oninput="updatePersonalizationSummary()"
+                        >
+                    </label>
+                `).join('')}
+            </div>
+        </div>
+    `).join('');
+
+    updatePersonalizationSummary();
+    document.getElementById('personalization-modal').classList.remove('hidden');
+}
+
+function addPersonalizedItemToCart() {
+    const product = activePersonalizationProduct;
+    if (!product) return;
+
+    const groupsEl = document.getElementById('personalization-groups');
+    if (!groupsEl) return;
+
+    const selectedValues = [];
+    let totalQty = 0;
+
+    groupsEl.querySelectorAll('.personalization-option').forEach((checkbox) => {
+        if (!checkbox.checked) return;
+
+        const qtyInput = groupsEl.querySelector(
+            `.personalization-qty[data-group="${checkbox.dataset.group}"][data-value="${checkbox.value}"]`
+        );
+        const qty = Number(qtyInput?.value || 0);
+
+        if (qty > 0) {
+            selectedValues.push({
+                label: checkbox.dataset.label,
+                qty
+            });
+            totalQty += qty;
+        }
+    });
+
+    if (!selectedValues.length) {
+        alert('בחר לפחות אפשרות אחת להתאמה אישית');
+        return;
+    }
+
+    const limit = getPersonalizationLimit();
+    if (limit > 0 && totalQty > limit) {
+        alert(`הכמות הכוללת לא יכולה להיות מעל ${limit} יחידות עבור הבחירה הזאת`);
+        enforcePersonalizationLimit();
+        updatePersonalizationSummary();
+        return;
+    }
+
+    const sizeSelect = document.getElementById('personalization-size-select');
+    const selectedSize = sizeSelect?.selectedOptions?.[0];
+    const selectedPrice = Number(selectedSize?.dataset?.price || 0) || Number(product.options?.[0]?.price || product.price || 0);
+
+    const summaryText = selectedValues.map((item) => `${item.label}: ${item.qty}`).join(' • ');
+
+    cart.push({
+        id: product.id,
+        name: product.name,
+        image: product.image,
+        price: selectedPrice,
+        countLabel: `${summaryText} | סה"כ ${totalQty}`,
+        totalQty,
+        isCustom: true
+    });
+
+    renderCart();
+    closePersonalizationModal();
+}
+
 // --- Render Products ---
 function renderProducts() {
     if (!productGrid) return;
@@ -348,12 +671,10 @@ function renderProducts() {
         card.className = `product-card bg-white rounded-xl shadow-sm hover:shadow-xl transition-all duration-300 overflow-hidden fade-in grid grid-rows-[auto_1fr] border border-gray-100`;
         card.style.animationDelay = `${delay}ms`;
 
-        // Determine initial price and options
         const hasFixedPriceOnly = typeof product.price === 'number' && !Array.isArray(product.options);
         const opts = Array.isArray(product.options) && product.options.length ? product.options : [{ label: product.label || product.count || 'יחידה', value: product.value || 1, price: product.price || 0 }];
         const initial = opts[0];
 
-        // Build options markup for native select
         const optionsMarkup = opts.map(o => `<option data-price="${o.price}" value="${o.value}">${o.label}</option>`).join('');
 
         const quantityControlMarkup = hasFixedPriceOnly
@@ -362,7 +683,7 @@ function renderProducts() {
 
         card.innerHTML = `
             <div class="h-64 overflow-hidden bg-gray-100">
-                <img src="${product.image}" alt="${product.name}" class="w-full h-full object-cover img-hover-zoom">
+                <img src="${product.image || 'https://via.placeholder.com/500x400?text=AriAl'}" alt="${product.name}" class="w-full h-full object-cover img-hover-zoom">
             </div>
             <div class="p-6 grid grid-rows-[auto_1fr_auto_auto] text-right">
                 <h3 class="text-xl font-bold text-bakery-dark mb-2">${product.name}</h3>
@@ -373,15 +694,14 @@ function renderProducts() {
                     <span id="price-${product.id}" class="font-bold text-xl text-bakery-accent">${Math.round(initial.price)}₪</span>
                 </div>
 
-                <button onclick="addToCart(${product.id})" class="w-full text-sm font-bold border border-bakery-accent text-bakery-accent hover:bg-bakery-accent hover:text-white py-2.5 rounded-lg transition-colors duration-300">
-                    הוסף לסל
+                <button onclick="openPersonalizationModal(${product.id})" class="w-full text-sm font-bold border border-bakery-accent text-bakery-accent hover:bg-bakery-accent hover:text-white py-2.5 rounded-lg transition-colors duration-300">
+                    התאמה אישית
                 </button>
             </div>
         `;
 
         productGrid.appendChild(card);
 
-        // Ensure the select shows the desired default
         const selectEl = card.querySelector('select.count-select');
         if (selectEl) selectEl.selectedIndex = 0;
     });
@@ -440,40 +760,7 @@ function updateCheckoutButtonState() {
 }
 
 window.addToCart = (productId) => {
-    const product = products.find(p => p.id === productId);
-    if (!product) return;
-
-    // Find the select for this product to determine selected pack & price
-    const selectEl = document.querySelector(`select.count-select[data-product-id="${productId}"]`);
-    let selectedLabel = '';
-    let selectedPrice = 0;
-
-    if (selectEl) {
-        const sel = selectEl.options[selectEl.selectedIndex];
-        selectedLabel = sel ? sel.textContent : '';
-        selectedPrice = sel && sel.dataset && sel.dataset.price ? parseFloat(sel.dataset.price) : 0;
-    } else if (product.options && product.options.length) {
-        selectedLabel = product.options[0].label;
-        selectedPrice = product.options[0].price;
-    } else {
-        selectedLabel = product.count || '';
-        selectedPrice = product.price || 0;
-    }
-
-    const item = {
-        id: product.id,
-        name: product.name,
-        image: product.image,
-        price: Number(selectedPrice),
-        countLabel: selectedLabel
-    };
-
-    cart.push(item);
-    renderCart();
-    if (cartBtn) {
-        cartBtn.classList.add('scale-110');
-        setTimeout(() => cartBtn.classList.remove('scale-110'), 200);
-    }
+    openPersonalizationModal(productId);
 };
 
 window.removeFromCart = (index) => {
